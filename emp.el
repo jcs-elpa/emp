@@ -7,7 +7,7 @@
 ;; Description: Emacs Music Playlist.
 ;; Keyword: music player playlist table meida
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (f "0.20.0"))
+;; Package-Requires: ((emacs "24.3") (f "0.20.0") (async "1.9.3")
 ;; URL: https://github.com/jcs090218/emp
 
 ;; This file is NOT part of GNU Emacs.
@@ -32,6 +32,7 @@
 
 ;;; Code:
 
+(require 'async)
 (require 'f)
 (require 'tabulated-list)
 
@@ -46,6 +47,9 @@
 (defconst emp--data-file "~/.emacs.d/emp.dat"
   "Data file path to store music history.")
 
+(defconst emp--buffer-name "*emp*"
+  "Name of the EMP buffer.")
+
 (defconst emp--format
   (vector (list "PN" 3 t)  ; Playing
           (list "Title" 50 t)
@@ -54,8 +58,9 @@
 
 (defvar emp-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "RET") 'emp-play-sound)
-    (define-key map (kbd "<mouse-1>") 'emp-play-sound)
+    (define-key map (kbd "RET") 'emp-select-music)
+    (define-key map (kbd "<mouse-1>") 'emp-select-music)
+    (define-key map (kbd "SPC") 'emp-stop-sound)
     map)
   "Keymap for `emp-mode'.")
 
@@ -71,8 +76,8 @@
 (defvar emp--loop nil
   "Current play sound loop.")
 
-(defvar emp--current-id -1
-  "Current play sound id.")
+(defvar emp--current-path ""
+  "Current play music path.")
 
 
 (defun emp--list-to-string (lst)
@@ -99,39 +104,62 @@
                 nil
                 (expand-file-name emp--data-file)))
 
-(defun emp--async-play-sound (path volume)
-  "Async play sound file PATH."
-  (when (processp emp--sound-process)
-    (ignore-errors (kill-process emp--sound-process))
-    (setq emp--sound-process nil))
-  (let ((command (car command-line-args)))
-    (setq emp--sound-process
-          (start-process "emp-play-sound"
-                         nil command "-Q" "--batch" "--eval"
-                         (format "(play-sound-file %s %s)"
-                                 (shell-quote-argument path)
-                                 volume)))))
-
 (defun emp--revert-buffer ()
   "Revert `emp-mode' buffer."
-  (tabulated-list-revert)
-  (tabulated-list-print-fake-header))
+  (interactive)
+  (if (get-buffer emp--buffer-name)
+      (with-current-buffer emp--buffer-name
+        (let ((old-pt (point)))
+          (setq tabulated-list-entries (emp--get-entries))
+          (tabulated-list-revert)
+          (tabulated-list-print-fake-header)
+          (goto-char old-pt)))
+    (error "[ERROR] Can't revert emp buffer if is not inside *emp* buffer list")))
 
-(defun emp-play-sound ()
+(defun emp--async-play-sound (path volume)
+  "Async play sound file PATH and with VOLUME."
+  (emp-stop-sound)
+  (setq emp--sound-process
+        (async-start
+         (lambda ()
+           (play-sound-file path volume))
+         (lambda (res)
+           (when emp--loop
+             (emp--async-play-sound path volume))))))
+
+(defun emp-stop-sound ()
+  "Stop the sound from current process."
+  (interactive)
+  (when (processp emp--sound-process)
+    (ignore-errors (kill-process emp--sound-process))
+    (setq emp--sound-process nil)
+    (setq emp--current-path "")
+    (emp--revert-buffer)))
+
+(defun emp-pause-sound ()
+  ""
+  (interactive)
+  ;; TODO: ..
+  (when (processp emp--sound-process)
+    (stop-process emp--sound-process)))
+
+(defun emp-resume-sound ()
+  ""
+  (interactive)
+  ;; TODO: ..
+  (when (processp emp--sound-process)
+    (continue-process emp--sound-process)))
+
+(defun emp-select-music ()
   "Play sound for current item."
   (interactive)
   (let ((id (tabulated-list-get-id))
         (entry (tabulated-list-get-entry)))
     (when (vectorp entry)
-      (let ((mark (aref entry 0)) (fname (aref entry 1)) (path (aref entry 2))
-            (old-pt (point)))
+      (let ((mark (aref entry 0)) (fname (aref entry 1)) (path (aref entry 2)))
         (emp--async-play-sound path emp--volume)
-        (emp--revert-buffer)
-        (goto-char old-pt)
-        (tabulated-list-delete-entry)
-        (tabulated-list-print-entry id (vector "*" fname path))
-        (goto-char old-pt)))))
-
+        (setq emp--current-path path)
+        (emp--revert-buffer)))))
 
 (defun emp--new-music-entry (path)
   "Add a music by PATH."
@@ -139,7 +167,9 @@
         (id (length tabulated-list-entries)))
     (push path new-entry-value)  ; Path
     (push (f-filename path) new-entry-value)  ; Title
-    (push "" new-entry-value)  ; PD
+    (if (string= path emp--current-path)  ; PD
+        (push "*" new-entry-value)
+      (push "" new-entry-value))
     (push (vconcat new-entry-value) new-entry)  ; Turn into vector.
     (push (number-to-string id) new-entry)  ; ID
     new-entry))
@@ -162,7 +192,7 @@
               (format "> Volume: %s, Loop: %s"
                       emp--volume
                       (if emp--loop "On" "Off")))
-  (setq tabulated-list-sort-key (cons "Title" t))
+  (setq tabulated-list-sort-key (cons "Title" nil))
   (tabulated-list-init-header)
   (setq tabulated-list-entries (emp--get-entries))
   (tabulated-list-print t)
@@ -172,7 +202,7 @@
 (defun emp ()
   "Start `emp-mode'."
   (interactive)
-  (pop-to-buffer "*emp-mode*" nil)
+  (pop-to-buffer emp--buffer-name nil)
   (emp-mode))
 
 
