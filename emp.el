@@ -48,7 +48,7 @@
 
 (defconst emp--format
   (vector (list "PN" 3 t)  ; Playing
-          (list "Title" 30 t)
+          (list "Title" 50 t)
           (list "Path" 120 t))
   "Format to assign to `tabulated-list-format' variable.")
 
@@ -90,6 +90,7 @@
 
 (defun emp--read-history-data ()
   "Read history `emp--data-file' to data file `emp--history-path'."
+  (unless (file-exists-p emp--data-file) (emp--write-history-data))
   (setq emp--history-path (split-string (emp--read-file emp--data-file) "\n" t)))
 
 (defun emp--write-history-data ()
@@ -100,10 +101,12 @@
 
 (defun emp--async-play-sound (path volume)
   "Async play sound file PATH."
-  (when (processp emp--sound-process) (kill-process emp--sound-process))
+  (when (processp emp--sound-process)
+    (ignore-errors (kill-process emp--sound-process))
+    (setq emp--sound-process nil))
   (let ((command (car command-line-args)))
     (setq emp--sound-process
-          (start-process "play-sound-file"
+          (start-process "emp-play-sound"
                          nil command "-Q" "--batch" "--eval"
                          (format "(play-sound-file %s %s)"
                                  (shell-quote-argument path)
@@ -118,19 +121,16 @@
   "Play sound for current item."
   (interactive)
   (let ((id (tabulated-list-get-id))
-        (entry (tabulated-list-get-entry))
-        (mark nil) (fname nil) (path nil)
-        (old-pt (point)))
+        (entry (tabulated-list-get-entry)))
     (when (vectorp entry)
-      (setq mark (aref entry 0))
-      (setq fname (aref entry 1))
-      (setq path (aref entry 2))
-      ;;(emp--async-play-sound path emp--volume)
-      (emp--revert-buffer)
-      (goto-char old-pt)
-      (tabulated-list-delete-entry)
-      (tabulated-list-print-entry id (vector "*" fname path))
-      (goto-char old-pt))))
+      (let ((mark (aref entry 0)) (fname (aref entry 1)) (path (aref entry 2))
+            (old-pt (point)))
+        (emp--async-play-sound path emp--volume)
+        (emp--revert-buffer)
+        (goto-char old-pt)
+        (tabulated-list-delete-entry)
+        (tabulated-list-print-entry id (vector "*" fname path))
+        (goto-char old-pt)))))
 
 
 (defun emp--new-music-entry (path)
@@ -158,8 +158,10 @@
   :group 'emp
   (setq tabulated-list-format emp--format)
   (setq tabulated-list-padding 1)
-  (setq tabulated-list--header-string
-        (format "Volume: %s, Loop: %s" emp--volume emp--loop))
+  (setq-local tabulated-list--header-string
+              (format "> Volume: %s, Loop: %s"
+                      emp--volume
+                      (if emp--loop "On" "Off")))
   (setq tabulated-list-sort-key (cons "Title" t))
   (tabulated-list-init-header)
   (setq tabulated-list-entries (emp--get-entries))
