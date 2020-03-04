@@ -137,14 +137,14 @@
     (emp--revert-buffer)))
 
 (defun emp-pause-sound ()
-  ""
+  "Pause the sound process."
   (interactive)
   ;; TODO: ..
   (when (processp emp--sound-process)
     (stop-process emp--sound-process)))
 
 (defun emp-resume-sound ()
-  ""
+  "Continue the sound process."
   (interactive)
   ;; TODO: ..
   (when (processp emp--sound-process)
