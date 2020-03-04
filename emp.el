@@ -7,7 +7,7 @@
 ;; Description: Emacs Music Playlist.
 ;; Keyword: music player playlist table meida
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (f "0.20.0") (async "1.9.3")
+;; Package-Requires: ((emacs "24.3") (f "0.20.0") (async "1.9.3"))
 ;; URL: https://github.com/jcs090218/emp
 
 ;; This file is NOT part of GNU Emacs.
@@ -44,7 +44,7 @@
   :link '(url-link :tag "Repository" "https://github.com/jcs090218/emp"))
 
 
-(defconst emp--data-file "~/.emacs.d/emp.dat"
+(defconst emp--data-file (concat user-emacs-directory "emp.dat")
   "Data file path to store music history.")
 
 (defconst emp--buffer-name "*emp*"
@@ -123,7 +123,7 @@
         (async-start
          (lambda ()
            (play-sound-file path volume))
-         (lambda (res)
+         (lambda (_res)
            (when emp--loop
              (emp--async-play-sound path volume))))))
 
@@ -153,10 +153,9 @@
 (defun emp-select-music ()
   "Play sound for current item."
   (interactive)
-  (let ((id (tabulated-list-get-id))
-        (entry (tabulated-list-get-entry)))
+  (let ((entry (tabulated-list-get-entry)))
     (when (vectorp entry)
-      (let ((mark (aref entry 0)) (fname (aref entry 1)) (path (aref entry 2)))
+      (let ((path (aref entry 2)))
         (emp--async-play-sound path emp--volume)
         (setq emp--current-path path)
         (emp--revert-buffer)))))
