@@ -4,6 +4,13 @@
 # emp
 > Emacs Music Playlist.
 
+## Usage
+
+Just call the following command to pop the music playlist.
+
+```
+M-x emp
+```
 
 ## Contribution
 
