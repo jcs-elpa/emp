@@ -12,6 +12,11 @@ Just call the following command to pop the music playlist.
 M-x emp
 ```
 
+## Todo List
+
+- [ ] Adjust volume while playing music.
+- [ ] Do either pause/continue the music.
+
 ## Contribution
 
 If you would like to contribute to this project, you may either 
