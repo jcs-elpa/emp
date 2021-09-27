@@ -1,8 +1,9 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![CI](https://github.com/jcs-elpa/emp/actions/workflows/test.yml/badge.svg)](https://github.com/jcs-elpa/emp/actions/workflows/test.yml)
 
 # emp
 > Emacs Music Playlist.
+
+[![CI](https://github.com/jcs-elpa/emp/actions/workflows/test.yml/badge.svg)](https://github.com/jcs-elpa/emp/actions/workflows/test.yml)
 
 ## Usage
 
