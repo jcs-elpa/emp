@@ -6,9 +6,9 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; Description: Emacs Music Playlist.
 ;; Keyword: music player playlist table meida
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (f "0.20.0") (async "1.9.3"))
-;; URL: https://github.com/jcs090218/emp
+;; Version: 0.1.0
+;; Package-Requires: ((emacs "24.3") (async "1.9.3") (f "0.20.0"))
+;; URL: https://github.com/jcs-elpa/emp
 
 ;; This file is NOT part of GNU Emacs.
 

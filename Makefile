@@ -1,29 +1,29 @@
 SHELL := /usr/bin/env bash
 
 EMACS ?= emacs
-CASK ?= cask
-
-PKG-FILES := emp.el
+EASK ?= eask
 
 TEST-FILES := $(shell ls test/emp-*.el)
 
-.PHONY: clean checkdoc lint build compile unix-test
+.PHONY: clean checkdoc lint package install compile test
 
-ci: clean build compile
+ci: clean package install compile
 
-build:
-	$(CASK) install
+package:
+	@echo "Packaging..."
+	$(EASK) package
+
+install:
+	@echo "Installing..."
+	$(EASK) install
 
 compile:
 	@echo "Compiling..."
-	@$(CASK) $(EMACS) -Q --batch \
-		-L . \
-		--eval '(setq byte-compile-error-on-warn t)' \
-		-f batch-byte-compile $(PKG-FILES)
+	$(EASK) compile
 
-unix-test:
+test:
 	@echo "Testing..."
-	$(CASK) exec ert-runner -L . $(LOAD-TEST-FILES) -t '!no-win' -t '!org'
+	$(EASK) exec ert-runner -L . $(LOAD-TEST-FILES) -t '!no-win' -t '!org'
 
 clean:
 	rm -rf .cask *.elc
