@@ -123,7 +123,9 @@
 (defun emp ()
   "Start `emp-mode'."
   (interactive)
-  (pop-to-buffer emp--buffer-name nil)
+  (if (get-buffer-window emp--buffer-name)
+      (pop-to-buffer emp--buffer-name nil)
+    (switch-to-buffer-other-window emp--buffer-name))
   (emp-mode))
 
 ;;
@@ -207,6 +209,7 @@
   (interactive)
   (when (processp emp--sound-process)
     (ignore-errors (kill-process emp--sound-process))
+    (ignore-errors (kill-buffer (process-buffer emp--sound-process)))
     (setq emp--sound-process nil)
     (unless emp--loop
       (setq emp--current-path ""))
