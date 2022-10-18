@@ -6,7 +6,7 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/jcs-elpa/emp
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "26.1") (async "1.9.3") (f "0.20.0"))
+;; Package-Requires: ((emacs "27.1") (async "1.9.3") (f "0.20.0"))
 ;; Keywords: multimedia
 
 ;; This file is NOT part of GNU Emacs.
@@ -307,6 +307,18 @@
     (dolist (path emp--paths)
       (push (emp--new-music-entry path) entries))
     entries))
+
+;;
+;; (@* "Hooks" )
+;;
+
+(defun emp--after-focus-change (&rest _)
+  "Run when window got focused."
+  (when (frame-focus-state)
+    (emp--load-history)
+    (ignore-errors (emp--revert-buffer))))
+
+(add-function :after after-focus-change-function #'emp--after-focus-change)
 
 (provide 'emp)
 ;;; emp.el ends here
