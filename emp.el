@@ -152,9 +152,14 @@ This can be one of these value,
 (defun emp ()
   "Start `emp-mode'."
   (interactive)
-  (if (get-buffer-window emp--buffer-name)
-      (pop-to-buffer emp--buffer-name nil)
-    (switch-to-buffer-other-window emp--buffer-name))
+  (switch-to-buffer (get-buffer-create emp--buffer-name))
+  (emp-mode))
+
+;;;###autoload
+(defun emp-other-window ()
+  "Start `emp-mode' in other window."
+  (interactive)
+  (switch-to-buffer-other-window (get-buffer-create emp--buffer-name))
   (emp-mode))
 
 ;;
