@@ -94,10 +94,11 @@
     (define-key map (kbd "DEL") #'emp-remove-file)
     (define-key map (kbd "RET") #'emp-select-music)
     (define-key map (kbd "<mouse-1>") #'emp-select-music)
-    (define-key map (kbd "<space>") #'emp-stop-sound)
+    (define-key map (kbd "<space>") #'emp-stop)
     (define-key map (kbd "M-<left>") #'emp-volume-dec)
     (define-key map (kbd "M-<right>") #'emp-volume-inc)
     (define-key map (kbd "l") #'emp-toggle-loop)
+    (define-key map (kbd "r") #'emp-replay)
     map)
   "Keymap for `emp-mode'.")
 
@@ -193,18 +194,20 @@
           (goto-char old-pt)))
     (error "[ERROR] Can't revert emp buffer if is not inside *emp* buffer list")))
 
-(defun emp--play-sound-async (path volume)
+(defun emp--play-async (path volume)
   "Async play sound file PATH and with VOLUME."
-  (emp-stop-sound)
+  (emp-stop)
+  (setq emp--current-path path)
+  (emp--revert-buffer)
   (setq emp--sound-process
         (async-start
          (lambda (&rest _)
            (play-sound-file path volume))
          (lambda (&rest _)
            (when emp--loop
-             (emp--play-sound-async path emp--volume))))))
+             (emp--play-async path emp--volume))))))
 
-(defun emp-stop-sound ()
+(defun emp-stop ()
   "Stop the sound from current process."
   (interactive)
   (when (processp emp--sound-process)
@@ -215,13 +218,20 @@
       (setq emp--current-path ""))
     (emp--revert-buffer)))
 
-(defun emp-pause-sound ()
+(defun emp-replay ()
+  "Replay current music."
+  (interactive)
+  (unless (string-empty-p emp--current-path)
+    (emp--play-async emp--current-path emp--loop)
+    (emp)))
+
+(defun emp-pause ()
   "Pause the sound process."
   (interactive)
   ;; TODO: ..
   (message "EMP currently doesn't support his functionality"))
 
-(defun emp-resume-sound ()
+(defun emp-resume ()
   "Continue the sound process."
   (interactive)
   ;; TODO: ..
@@ -237,9 +247,7 @@
   "Play sound for current item."
   (interactive)
   (when-let ((path (emp--music-file)))
-    (emp--play-sound-async path emp--volume)
-    (setq emp--current-path path)
-    (emp--revert-buffer)))
+    (emp--play-async path emp--volume)))
 
 (defun emp-find-file (filename &rest _)
   "Find the music FILENAME."
