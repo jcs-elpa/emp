@@ -74,7 +74,7 @@
 (defvar emp--sound-process nil
   "Process that plays the sound.")
 
-(defvar emp--volume 60
+(defvar emp--volume 20
   "Current play sound volume.")
 
 (defvar emp--loop nil
@@ -91,7 +91,7 @@
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "M-f") #'emp-find-file)
     (define-key map (kbd "<backspace>") #'emp-remove-file)
-    (define-key map (kbd "<delete>") #'emp-remove-file)
+    (define-key map (kbd "DEL") #'emp-remove-file)
     (define-key map (kbd "RET") #'emp-select-music)
     (define-key map (kbd "<mouse-1>") #'emp-select-music)
     (define-key map (kbd "<space>") #'emp-stop-sound)
@@ -258,7 +258,6 @@
   "Decrease volume."
   (interactive)
   (setq emp--volume (max 0 (- emp--volume (abs emp-volume-delta))))
-
   (emp))
 
 (defun emp-volume-inc ()
