@@ -7,7 +7,7 @@
 
 (package-file "emp.el")
 
-(source "elpa")
+(source "gnu")
 (source "jcs-elpa")
 (source "melpa")
 
