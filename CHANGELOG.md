@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.1.1 (Unreleased)
 > Released N/A
 
-* N/A
+* Add replay functionality (951f1fa6c37a87bb5a3871dd0679d286105275fb)
 
 ## 0.1.0
 > Released Oct 18, 2022
