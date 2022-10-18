@@ -3,7 +3,7 @@
          "Emacs Music Playlist")
 
 (website-url "https://github.com/jcs-elpa/emp")
-(keywords "music" "player" "playlist" "table" "meida")
+(keywords "multimedia")
 
 (package-file "emp.el")
 

@@ -7,7 +7,7 @@
 ;; URL: https://github.com/jcs-elpa/emp
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "26.1") (async "1.9.3") (f "0.20.0"))
-;; Keywords: music player playlist table meida
+;; Keywords: multimedia
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -242,7 +242,7 @@
     (emp--revert-buffer)))
 
 (defun emp-find-file (filename &rest _)
-  "Find the music file."
+  "Find the music FILENAME."
   (interactive
    (list (read-file-name "Select music file: " default-directory)))
   (push filename emp--paths)
