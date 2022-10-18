@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 * Add replay functionality (951f1fa6c37a87bb5a3871dd0679d286105275fb)
 * Clear history on focus in (bdbfb62e6b22cffdeefa94c926b1db856601a774)
+* Remove loop flag, and replace with mode flag (665bdc2430d8070bac6fbaa9ed6fa3e23288ec84)
 
 ## 0.1.0
 > Released Oct 18, 2022
