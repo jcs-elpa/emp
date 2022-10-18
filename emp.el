@@ -313,7 +313,7 @@
 ;;
 
 (defun emp--after-focus-change (&rest _)
-  "Run when window got focused."
+  "Run when window got focused in/out."
   (when (frame-focus-state)
     (emp--load-history)
     (ignore-errors (emp--revert-buffer))))
