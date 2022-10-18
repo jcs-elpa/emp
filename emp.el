@@ -303,7 +303,9 @@ LOOP is nil then we simply return nil."
   (message "EMP currently doesn't support his functionality"))
 
 (defun emp--music-file (&optional entry)
-  "Return a music filename from current item."
+  "Return a music filename from current item.
+
+If ENTRY exists, use that instead."
   (let ((entry (or entry (tabulated-list-get-entry))))
     (when (vectorp entry)
       (aref entry 2))))
