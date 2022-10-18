@@ -376,6 +376,7 @@ If ENTRY exists, use that instead."
 (defun emp--get-entries ()
   "Get all the music entries."
   (emp--load-history)
+  (emp--load-settings)
   (let (entries)
     (dolist (path emp--paths)
       (push (emp--new-music-entry path) entries))
@@ -389,6 +390,7 @@ If ENTRY exists, use that instead."
   "Run when window got focused in/out."
   (when (frame-focus-state)
     (emp--load-history)
+    (emp--load-settings)
     (ignore-errors (emp--revert-buffer))))
 
 (add-function :after after-focus-change-function #'emp--after-focus-change)
