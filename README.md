@@ -1,7 +1,9 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![JCS-ELPA](https://raw.githubusercontent.com/jcs-emacs/badges/master/elpa/v/emp.svg)](https://jcs-emacs.github.io/jcs-elpa/#/emp)
+<a href="https://jcs-emacs.github.io/"><img align="right" src="https://raw.githubusercontent.com/jcs-emacs/badges/master/others/built-with/dark.svg" alt="Built with"></a>
 
 # emp
-> Emacs Music Playlist.
+> Emacs Music Playlist
 
 [![CI](https://github.com/jcs-elpa/emp/actions/workflows/test.yml/badge.svg)](https://github.com/jcs-elpa/emp/actions/workflows/test.yml)
 
