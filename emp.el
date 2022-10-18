@@ -336,12 +336,14 @@ If ENTRY exists, use that instead."
   "Decrease volume."
   (interactive)
   (setq emp--volume (max 0 (- emp--volume (abs emp-volume-delta))))
+  (emp--save-settings)
   (emp))
 
 (defun emp-volume-inc ()
   "Increase volume."
   (interactive)
   (setq emp--volume (min 100 (+ emp--volume (abs emp-volume-delta))))
+  (emp--save-settings)
   (emp))
 
 (defun emp-cycle-mode ()
@@ -351,6 +353,7 @@ If ENTRY exists, use that instead."
     (if (= 1 (length next))
         (setq emp--mode 'single)
       (setq emp--mode (nth 1 next))))
+  (emp--save-settings)
   (emp))
 
 ;;
