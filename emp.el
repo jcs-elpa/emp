@@ -34,6 +34,7 @@
 (require 'cl-lib)
 (require 'files)
 (require 'tabulated-list)
+(require 'thingatpt)
 
 (require 'async)
 (require 'buffer-wrap)
