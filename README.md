@@ -7,7 +7,7 @@
 
 [![CI](https://github.com/jcs-elpa/emp/actions/workflows/test.yml/badge.svg)](https://github.com/jcs-elpa/emp/actions/workflows/test.yml)
 
-## Usage
+## 🔨 Usage
 
 Just call the following command to pop the music playlist.
 

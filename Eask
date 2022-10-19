@@ -12,7 +12,7 @@
 (source "melpa")
 
 (depends-on "emacs" "27.1")
-(depends-on "async")
+(depends-on "sound-async")
 (depends-on "buffer-wrap")
 (depends-on "f")
 (depends-on "msgu")
