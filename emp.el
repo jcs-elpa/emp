@@ -110,7 +110,6 @@ This can be one of these value,
     (define-key map (kbd "<backspace>") #'emp-remove-file)
     (define-key map (kbd "DEL") #'emp-remove-file)
     (define-key map (kbd "RET") #'emp-select-music)
-    (define-key map (kbd "<mouse-1>") #'emp-select-music)
     (define-key map (kbd "<space>") #'emp-stop)
     (define-key map (kbd "M-<left>") #'emp-volume-dec)
     (define-key map (kbd "M-<right>") #'emp-volume-inc)
