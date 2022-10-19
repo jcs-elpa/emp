@@ -125,6 +125,8 @@ This can be one of these value,
   :keymap emp-mode-map
   :group 'emp
   (ignore-errors (make-directory (f-dirname emp--history-file)))
+  (emp--load-history)
+  (emp--load-settings)
   (setq tabulated-list-format emp--format)
   (setq tabulated-list-padding 1)
   (setq-local tabulated-list--header-string
@@ -224,6 +226,8 @@ This can be one of these value,
   (interactive)
   (if (get-buffer emp--buffer-name)
       (with-current-buffer emp--buffer-name
+        (emp--load-history)
+        (emp--load-settings)
         (let ((old-pt (point)))
           (setq tabulated-list-entries (emp--get-entries))
           (tabulated-list-revert)
@@ -379,8 +383,6 @@ If ENTRY exists, use that instead."
 
 (defun emp--get-entries ()
   "Get all the music entries."
-  (emp--load-history)
-  (emp--load-settings)
   (let (entries)
     (dolist (path emp--paths)
       (push (emp--new-music-entry path) entries))
@@ -393,8 +395,6 @@ If ENTRY exists, use that instead."
 (defun emp--after-focus-change (&rest _)
   "Run when window got focused in/out."
   (when (frame-focus-state)
-    (emp--load-history)
-    (emp--load-settings)
     (ignore-errors (emp--revert-buffer))))
 
 (add-function :after after-focus-change-function #'emp--after-focus-change)
