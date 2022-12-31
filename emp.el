@@ -1,6 +1,6 @@
 ;;; emp.el --- Emacs Music Playlist  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020-2022  Shen, Jen-Chieh
+;; Copyright (C) 2020-2023  Shen, Jen-Chieh
 ;; Created date 2020-03-02 20:54:03
 
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
