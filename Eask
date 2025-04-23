@@ -1,3 +1,5 @@
+;; -*- mode: eask; lexical-binding: t -*-
+
 (package "emp"
          "0.1.0"
          "Emacs Music Playlist")
